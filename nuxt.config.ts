@@ -2,6 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   //...
+  css: ['@/assets/css/global.css'],
   build: {
     transpile: ['vuetify']
   },
@@ -13,7 +14,6 @@ export default defineNuxtConfig({
       })
     },
     '@nuxtjs/stylelint-module'
-    //...
   ],
   vite: {
     vue: {

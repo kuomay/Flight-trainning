@@ -4,7 +4,7 @@
       <v-sheet class="title-icon" color="transparent">
         <img src="/assets/無人機飛操手培訓班採購案_icon/组 2.png" />
       </v-sheet>
-      <v-sheet class="title text-white" color="transparent">
+      <v-sheet class="title font-pingfang text-white" color="transparent">
         飛行教育資源平台
       </v-sheet>
       <v-sheet class="login-icon" color="transparent">
@@ -20,41 +20,59 @@
       ></v-carousel-item>
     </v-carousel>
     <v-row no-gutters>
-      <v-col cols="8">
-        <v-sheet class="pa-2 ma-2"> .v-col-8
-          <v-card class="mx-auto" max-width="344">
-  >
-    <v-card-text>
-      <div>Word of the Day</div>
-              <p class="text-h4 text--primary">be•nev•o•lent</p>
-      </p>
-      <p>adjective</p>
-      <div class="text--primary">
-                well meaning and kindly.<br />
-        "a benevolent smile"
-      </div>
-    </v-card-text>
-    <v-card-actions>
-              <v-btn color="deep-purple-accent-4" variant="text">
-      >
-        Learn More
-      </v-btn>
-            </v-card-actions>
-  </v-card>
+      <v-col cols="8" style="background: #f0f0f0">
+        <v-sheet class="custom-card-left ml-15 mt-10">
+          <div class="">
+            <div class="card">
+              <div class="card-header font-pingfang">最新消息</div>
+              <div class="card-body">
+                <div class="left-content">
+                  <h5 class="font-pingfang">系統公告</h5>
+                  <p class="mt-10">系統開放使用公告</p>
+                  <p class="mb-10 mt-10">系統開放使用公告</p>
+                  <div class="button-container">
+                    <a href="#" class="btn btn-primary">更多</a>
+                  </div>
+                </div>
+                <div class="right-content">
+                  <h5 class="font-pingfang">民航局公告</h5>
+                  <p class="mt-10">派遣協調人員至航管單位之登記方式</p>
+                  <p class="mb-10 mt-10">派遣協調人員至航管單位之登記方式</p>
+                  <div class="button-container">
+                    <a href="#" class="btn btn-primary">更多</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </v-sheet>
       </v-col>
-
-      <v-col cols="4">
-        <v-sheet class="pa-2 ma-2"> .v-col-4 </v-sheet>
+      <v-col cols="4" style="background: #f0f0f0">
+        <v-sheet class="custom-card-right mt-10">
+          <div class="">
+            <div class="card">
+              <div class="card-header">法規及文件</div>
+              <div class="card-body">
+                <div class="left-content">
+                  <p class="mb-10 mt-10">系統使用手冊</p>
+                  <div class="button-container">
+                    <a href="#" class="btn btn-primary">更多</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-sheet>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup>
+import banner from 'assets/images/banner.jpg'
 const items = ref([
   {
-    src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
+    src: banner
   },
   {
     src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
@@ -75,24 +93,84 @@ const items = ref([
 }
 
 .title-icon img {
-  margin-left: 100px;
   margin-top: 20px;
+  margin-left: 100px;
   width: 157px;
   height: 60px;
 }
 
 .title {
-  font:
-    normal normal bold 30px/42px 'PingFang SC',
-    sans-serif;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   margin-top: 29px;
 }
 
 .login-icon {
   margin-top: 25px;
+  margin-right: 100px;
   width: 50px;
   height: 50px;
-  margin-right: 100px;
+}
+
+.custom-card-left {
+  width: 1100px;
+  height: 518px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 10px; /* 添加左边卡片的圆角 */
+}
+
+.custom-card-right {
+  width: 550px;
+  height: 518px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+}
+
+.title-container {
+  background-color: #153161;
+}
+
+.card-header {
+  font:
+    normal normal bold 30px/42px 'PingFang SC',
+    sans-serif;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+  background-color: #153161;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.left-content,
+.right-content {
+  flex: 0 0 45%;
+}
+
+h5 {
+  text-align: center;
+  color: #153161;
+}
+
+.button-container {
+  text-align: center;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #153161;
+  border-radius: 25px;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 </style>
