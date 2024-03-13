@@ -1,4 +1,8 @@
 /* global.css */
-.font-pingfang {
+body {
     font: normal normal bold 30px/42px 'PingFang SC', sans-serif;
   }
+
+p,a {
+  font-size: 16px;
+}

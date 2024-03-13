@@ -2,7 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   //...
-  css: ['@/assets/css/global.css'],
+  css: ['@/assets/scss/global.scss'],
   build: {
     transpile: ['vuetify']
   },

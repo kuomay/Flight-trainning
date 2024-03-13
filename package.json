@@ -14,8 +14,12 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "nuxt": "^3.10.3",
+    "ol": "^9.0.0",
+    "ol-contextmenu": "^5.4.0",
+    "ol-ext": "^4.0.16",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-openlayers": "^6.1.0"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.2.0",
@@ -27,7 +31,6 @@
     "postcss-html": "^1.6.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.12",
     "sass": "^1.71.1",
     "stylelint": "^16.2.1",
     "stylelint-config-standard": "^36.0.0",
