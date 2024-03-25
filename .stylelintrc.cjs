@@ -18,7 +18,7 @@ module.exports = {
       }
     ],
     rules: {
-      'unit-allowed-list': [ 'em', 'rem', 'deg', 'px', 'vh', 'vw', '%', 's', 'ms' ],
+      'unit-allowed-list': [ 'em', 'rem', 'deg', 'px', 'vh', 'vw', '%', 's', 'ms', 'fr' ],
       'order/properties-order': [
         'position',
         'top',

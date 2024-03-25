@@ -13,7 +13,13 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/stylelint-module',
+    [
+      "@pinia/nuxt",
+      {
+        autoImports: ["defineStore", ["defineStore", "definePiniaStore"]],
+      },
+    ]
   ],
   vite: {
     vue: {
@@ -21,5 +27,5 @@ export default defineNuxtConfig({
         transformAssetUrls
       }
     }
-  },
+  }
 })
