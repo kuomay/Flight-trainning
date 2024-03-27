@@ -460,8 +460,8 @@ if (regulaAndDocError.value) {
               <div class="card-body">
                 <div class="right-content">
                   <div v-for="announcement in regulaAndDocData.regulationsAndDocuments" :key="announcement.id">
-                    <p class="mb-10 mt-5">{{ announcement.expirationDate }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.title }}</p>
+                    <p class="mt-5">{{ announcement.expirationDate }}</p>
+                    <p class="mt-5">{{ announcement.title }}</p>
                     <p class="mb-10 mt-5">{{ announcement.content }}</p>
                     <v-divider></v-divider>
                   </div>
@@ -555,7 +555,7 @@ if (regulaAndDocError.value) {
 
 .custom-card-right {
   width: 33vw; /* 30% of the viewport's width */
-  height: 50vh; /* 50% of the viewport's height */
+  height: 75vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px
 }
