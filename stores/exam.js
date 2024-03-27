@@ -7,16 +7,10 @@ export const useExamStore = defineStore('exam',()=>{
     examData.push(data);
   }  
   
+  const storeAccount = ref('')
+
   return {
-    addExamData
+    addExamData,
+    storeAccount
   }
 });
-  // id: 'exam',
-  // state: () => ({
-  //   examData: []
-  // }),
-  // actions: {
-  //   addExamData(data) {
-  //     this.examData.push(data);
-  //   }
-  // }

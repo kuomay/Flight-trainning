@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import {useExamStore} from '@/stores/exam'
+
+const useExam = useExamStore()
+const storeAccount = storeToRefs(useExam)
 
 const userOldPassword = ref('');
 const userNewPassword = ref('');
@@ -7,38 +11,73 @@ const userConfirmNewPassword = ref('');
 
 const OldPasswordRules = [
   value => {
-    if (value && value.length >= 8) return true;
-    return '密碼至少需要8個字符';
+    if (value && value.length >= 5) return true;
+    return '密碼至少需要5個字符';
   }
 ];
 
 const passwordRules = [
   value => {
     if (!value) return '請輸入新密碼';
-    if (value.length >= 8) return true;
-    return '新密碼至少需要8個字符';
+    if (value.length >= 5) return true;
+    return '新密碼至少需要5個字符';
   }
 ];
 
 const confirmPasswordRules = [
   value => {
     if (!value) return '請確認新密碼';
-    if (value.length >= 8) return true;
-    return '新密碼至少需要8個字符';
+    if (value.length >= 5) return true;
+    return '新密碼至少需要5個字符';
   }
 ];
 
-const handleRevise = () => {
-    if (!userOldPassword.value || !userNewPassword.value || !userConfirmNewPassword.value) {
-        alert('請填寫所有欄位');
-        return;
-    }
 
-    if (userNewPassword.value !== userConfirmNewPassword.value) {
-        alert('新密碼與確認新密碼不一致');
-        return;
-    }
-  alert('修改完成');
+
+const handleRevise = async () => {
+  if (!userOldPassword.value || !userNewPassword.value || !userConfirmNewPassword.value) {
+    alert('請填寫所有欄位');
+    return;
+  }
+
+  if (userNewPassword.value !== userConfirmNewPassword.value) {
+    alert('新密碼與確認新密碼不一致');
+    return;
+  }
+
+  if (userOldPassword.value.length < 5) {
+    alert('密碼至少需要 5 個字符');
+    return;
+  }
+
+  const data = {
+    oldPassword: userOldPassword.value,
+    password: userNewPassword.value,
+    account: storeAccount.value
+  };
+
+  console.log(data);
+
+  // try {
+  //   const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login', {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: data
+  //   });
+
+  //   console.log(response);
+
+  //   if (response.ok) {
+  //     alert('修改完成');
+  //   } else {
+  //     throw new Error('修改失敗');
+  //   }
+  // } catch (error) {
+  //   console.error('Error updating password:', error);
+  //   alert('修改密碼時錯誤');
+  // }
 };
 </script>
 

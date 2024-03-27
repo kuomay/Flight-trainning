@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from 'vue'
 import banner from 'assets/images/banner.jpg'
 import taipei from 'assets/images/map/组 1147.png'
 import kinmen from 'assets/images/map/组 1148.png'
@@ -16,7 +17,6 @@ import Hualien from 'assets/images/map/组 1160.png'
 import Taitung from 'assets/images/map/组 1159.png'
 import Yilan from 'assets/images/map/组 1161.png'
 import Kaohsiung from 'assets/images/map/组 1162.png'
-// import testmap from 'assets/images/map/组 1163.png'
 
 const items = ref([
   {
@@ -348,22 +348,26 @@ const venuePhotos = [
   return null;
 });
 
-onMounted(async () => {
-  try {
-    const { data, error } = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystem', {
-      method: 'GET'
-    });
 
-    if (error) {
-      throw new Error('API 請求失敗');
-    }
+const { data: systemDataResponse, error: systemError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystemRow/2');
+const systemData = systemDataResponse;
 
-    // 在這裡處理從 API 返回的數據，例如更新系統公告的內容
-    console.log(data); // 這裡只是示例，你可以根據返回的數據進行相應的處理
-  } catch (error) {
-    console.error('發生錯誤:', error);
-  }
-});
+const { data: caaDataResponse, error: caaError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetCaaRow/2');
+const caaData = caaDataResponse;
+
+const { data: regulaAndDocDataResponse, error: regulaAndDocError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetRegulaAndDocRow/2');
+const regulaAndDocData = regulaAndDocDataResponse;
+
+if (systemError.value) {
+  console.error('Error fetching system data:', systemError.value);
+}
+if (caaError.value) {
+  console.error('Error fetching CAA data:', caaError.value);
+}
+if (regulaAndDocError.value) {
+  console.error('Error fetching regula and doc data:', regulaAndDocError.value);
+}
+
 
 </script>
 
@@ -377,7 +381,7 @@ onMounted(async () => {
         飛行教育資源平台
       </v-sheet>
       <Nuxt-link to="/login"><v-sheet class="login-icon" color="transparent">
-        <img src="/assets/images/icon/组 4.png" />
+        <img src="/assets/images/icon/组 1147.png" />
       </v-sheet></Nuxt-link>
       
     </div>
@@ -396,7 +400,7 @@ onMounted(async () => {
             <div class="card">
               <div class="card-header font-pingfang">
                 <img
-                  src="/assets/images/icon/路徑 11.png"
+                  src="/assets/images/icon/组 1151.png"
                   style="
                     width: 38px;
                     height: 36px;
@@ -410,16 +414,24 @@ onMounted(async () => {
               <div class="card-body">
                 <div class="left-content">
                   <h5 class="font-pingfang">系統公告</h5>
-                  <p class="mt-10">系統開放使用公告</p>
-                  <p class="mb-10 mt-10">系統開放使用公告</p>
+                  <div v-for="announcement in systemData.systemAnnouncements" :key="announcement.id">
+                    <p class="mt-5">{{ announcement.expirationDate }}</p>
+                    <p class="mt-5">{{ announcement.title }}</p>
+                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
+                    <v-divider></v-divider>
+                  </div>
                   <div class="button-container">
                     <a href="#" class="btn btn-primary">更多</a>
                   </div>
                 </div>
                 <div class="right-content">
                   <h5 class="font-pingfang">民航局公告</h5>
-                  <p class="mt-10">派遣協調人員至航管單位之登記方式</p>
-                  <p class="mb-10 mt-10">派遣協調人員至航管單位之登記方式</p>
+                  <div v-for="announcement in caaData.caaAnnouncements" :key="announcement.id">
+                    <p class="mt-5">{{ announcement.expirationDate }}</p>
+                    <p class="mt-5">{{ announcement.title }}</p>
+                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
+                    <v-divider></v-divider>
+                  </div>
                   <div class="button-container">
                     <a href="#" class="btn btn-primary">更多</a>
                   </div>
@@ -435,7 +447,7 @@ onMounted(async () => {
             <div class="card">
               <div class="card-header">
                 <img
-                  src="/assets/images/icon/路径 12.png"
+                  src="/assets/images/icon/组 1154.png"
                   style="
                     width: 38px;
                     height: 36px;
@@ -446,8 +458,13 @@ onMounted(async () => {
                 />法規及文件
               </div>
               <div class="card-body">
-                <div class="left-content">
-                  <p class="mb-10 mt-10">系統使用手冊</p>
+                <div class="right-content">
+                  <div v-for="announcement in regulaAndDocData.regulationsAndDocuments" :key="announcement.id">
+                    <p class="mb-10 mt-5">{{ announcement.expirationDate }}</p>
+                    <p class="mb-10 mt-5">{{ announcement.title }}</p>
+                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
+                    <v-divider></v-divider>
+                  </div>
                   <div class="button-container">
                     <a href="#" class="btn btn-primary">更多</a>
                   </div>
@@ -515,7 +532,6 @@ onMounted(async () => {
 .title-icon img {
   margin-top: 20px;
   margin-right: 400px;
-  /* margin-left: 100px; */
 }
 
 .title {
@@ -531,16 +547,17 @@ onMounted(async () => {
 
 .custom-card-left {
   width: 60vw; /* 70% of the viewport's width */
-  height: 50vh; /* 50% of the viewport's height */
+  height: 75vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px; /* 添加左边卡片的圆角 */
+  margin-bottom: 100px;
 }
 
 .custom-card-right {
-  width: 30vw; /* 30% of the viewport's width */
+  width: 33vw; /* 30% of the viewport's width */
   height: 50vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 10px;
+  border-radius: 10px
 }
 
 .title-container {
@@ -568,6 +585,7 @@ onMounted(async () => {
 .left-content,
 .right-content {
   flex: 0 0 45%;
+  /* margin-bottom: 100px; */
 }
 
 h5 {
@@ -588,10 +606,11 @@ h5 {
   background-color: #B34712;
   border-radius: 25px;
   display: inline-block;
+  margin-top: 15px;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #FFAA00;
 }
 
 
@@ -602,10 +621,6 @@ h5 {
 }
 
 .subjects {
-  /* display: flex;
-  flex-direction: row; */
-  /* width: 25vw; */
-  /* outline: red solid 2px; */
   margin-left: 150px;
   margin-top: 30px;
   grid-row: 1/2;
@@ -613,18 +628,15 @@ h5 {
 } 
 
 .v-select {
-  /* outline: red solid 2px; */
   background-color: #153161;
   color: #fcfbfb;
   border-radius: 15px;
   font-weight: bolder;
-  /* width: 153px; */
   height: 52px;
 }
 .venues {
   background-color: #E6E6E6;
   color: black;
-  /* width: 488px; */
   height: 55px;
   border-radius: 28px;
   grid-row: 2/3;

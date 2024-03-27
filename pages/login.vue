@@ -1,5 +1,12 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import {useExamStore} from '@/stores/exam'
+
+const useExam = useExamStore()
+const storeAccount = storeToRefs(useExam)
+
+const router = useRouter()
 
 const userAccount = ref('');
 const userPassword = ref('');
@@ -44,7 +51,7 @@ const handleSubmit = async () => {
     }
 
     try {
-        const response = await useFetch('http://maxs-fer.geosat.com.tw/Examine/api/Login', {
+        const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -52,30 +59,24 @@ const handleSubmit = async () => {
                 password: userPassword.value
             })
         })
+        console.log(response)
 
-        console.log('Success:', response);
-
-        // 這裡可以添加登入成功後的操作，例如導向到其他頁面
-        // this.$router.push('/flight');
-        // alert(`帳號: ${userAccount.value}\n密碼: ${userPassword.value}`);
+        if (response.data.value === "ok") {
+            console.log("登入成功！");
+            localStorage.setItem('isLoggedIn', true);
+            storeAccount.value = userAccount.value
+            router.push('/flight')
+            console.log('jump')
+            // 例如，可以跳转到其他页面
+        } else if (response.data.value === "帳號密碼錯誤") {
+            console.log("帳號或密碼错误！");
+            alert('登入失敗，請檢查您的帳號或密碼');
+        }
     } catch (err) {
         console.error('Error:',err);
         alert('登入失敗，請檢查您的帳號或密碼');
     }
 };
-
-// const handleRevise = () => {
-//     if (!userNewPassword.value || !userConfirmNewPassword.value || !userInterimPassword.value) {
-//         alert('請填寫所有欄位');
-//         return;
-//     }
-
-//     if (userNewPassword.value !== userConfirmNewPassword.value) {
-//         alert('新密碼與確認新密碼不一致');
-//         return;
-//     }
-//   alert('修改完成');
-// };
 
 const handleForgotPassword = () => {
     isForget.value = !isForget.value

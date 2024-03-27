@@ -3,18 +3,15 @@ import { ref } from 'vue';
 import { useExamStore } from '@/stores/exam';
 
 const store = useExamStore();
-
 const examTypes = ['普通操作證學科測驗', '專業操作證學科測驗'];
-
 const selectedExamType = ref(examTypes[0]);
-
-// 控制是否开始考试的变量
 const examStarted = ref(false);
+const countdown = ref(0);
 const examList = ref([
   {
     id: 'uniqueId1',
     title: '問題標題',
-    answer: 'B',
+    answer: '',
     options: {
       A: '選項A內容',
       B: '選項B內容',
@@ -22,42 +19,50 @@ const examList = ref([
       D: '選項D內容'
     }
   },
-  {
-    id: 'uniqueId2',
-    title: '另一個問題標題',
-    answer: 'D',
-    options: {
-      A: '選項A內容',
-      B: '選項B內容',
-      C: '選項C內容',
-      D: '選項D內容'
-    }
-  }
 ]);
 
-// 倒计时剩余时间（单位：秒）
-const countdown = ref(0);
+const userAns = reactive([])
+const totalScore = ref(0);
+
+const isSubmit = ref(false);
+const handleSubmut = () => {
+  console.log(userAns)
+  isSubmit.value = true;
+  console.log(typeof(userAns[0]))
+  examList.value.forEach((exam, index) => {
+    if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
+      totalScore.value += 4;
+    } 
+    console.log(store.score.value)
+  });
+}
 
 const startExam = async () => {
   examStarted.value = true;
-  countdown.value = 10 * 60;
+
+  countdown.value = 10 * 1;
 
   try {
-    const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/0/25', {
+    let apiUrl;
+    if (selectedExamType.value === '普通操作證學科測驗') {
+      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/0/25';
+    } else if (selectedExamType.value === '專業操作證學科測驗') {
+      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/1/25';
+    }
+
+    const response = await useFetch(apiUrl, {
       method: 'GET'
     });
 
     // 如果需要處理回應的資料，可以在這裡進行操作
-    const examQuestions = await response.json();
+    const examQuestions = response; //JSON.stringify(response);
+    //console.log(JSON.parse(examQuestions));
     // 將取得的測驗題目設置到 examList 中
-    examList.value = examQuestions;
+    examList.value = examQuestions.data._value.questions;
   } catch (error) {
     console.error('Error fetching exam questions:', error);
     // 在這裡處理錯誤，例如顯示錯誤訊息給用戶
   }
-
-
-  // 创建倒计时器
   
   const timer = setInterval(() => {
     countdown.value--;
@@ -65,6 +70,12 @@ const startExam = async () => {
       clearInterval(timer);
       alert('作答已結束');
       store.addExamData(examList.value);
+      isSubmit.value = true;
+      examList.value.forEach((exam, index) => {
+        if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
+          totalScore.value += 4;
+        } 
+      });
     }
   }, 1000);
 };
@@ -82,10 +93,10 @@ const startExam = async () => {
                     label="請選擇學科測驗種類"
                     :items="examTypes"
                 ></v-select>
-                  <p class="mt-5 ml-5">學科測驗計分方式</p>
-                  <h4 class="mt-2 ml-5">合格標準 : 80 (滿分100)</h4>
-                  <h4 class="mt-2 ml-5">測驗題數 : 20</h4>
-                  <h4 class="mt-2 ml-5">單題扣分 : 5 </h4>
+                  <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
+                  <h4 class="mt-5 ml-5">合格標準 : 80 (滿分100)</h4>
+                  <h4 class="mt-3 ml-5">測驗題數 : 20</h4>
+                  <h4 class="mt-3 ml-5">單題扣分 : 5 </h4>
                   <button class="btn ml-5 mb-6" @click="startExam">開始測驗</button>
                   <v-divider></v-divider>
                 </v-card>
@@ -102,10 +113,11 @@ const startExam = async () => {
                 </div>
                  
                   <v-divider></v-divider>
-                  <p class="mt-5 ml-5">學科測驗計分方式</p>
-                  <h4 class="mt-2 ml-5">合格標準 : 80 (滿分100)</h4>
-                  <h4 class="mt-2 ml-5">測驗題數 : 20</h4>
-                  <h4 class="mb-5 mt-2 ml-5">單題扣分 : 5 </h4>
+                  <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
+                  <h4 class="mt-5 ml-5">合格標準 : 80 (滿分100)</h4>
+                  <h4 class="mt-3 ml-5">測驗題數 : 25</h4>
+                  <h4 class="mb-5 mt-3 ml-5">單題扣分 : 4 </h4>
+                  <p class="mb-5 mt-2 ml-5 font-weight-bold"  :class="{ 'green-text': totalScore >= 80, 'red-text': totalScore < 80 }" v-if="isSubmit">總分：{{ totalScore }}</p>
                   <v-divider></v-divider>
                 </v-card>
                 <v-card-text>
@@ -114,7 +126,7 @@ const startExam = async () => {
                       <v-card>
                         <v-card-title class="font-weight-bold">({{ index + 1 }}) {{ exam.title }}</v-card-title>
                         <v-card-text>
-                          <v-radio-group v-model="exam.answer" :options="exam.options">
+                          <v-radio-group v-model="userAns[index]" :options="exam.options" :disabled="isSubmit">
                             <v-radio
                               v-for="(option, key) in exam.options"
                               :key="key"
@@ -122,12 +134,12 @@ const startExam = async () => {
                               :value="key"
                             ></v-radio>
                           </v-radio-group>
-                          <p>answer: {{ exam.answer }}</p>
+                          <v-alert type="error" v-if="((!userAns[index] || userAns[index].toUpperCase() !== exam.answer) || userAns[index] === null) && isSubmit">正確答案 : {{ exam.answer }}</v-alert>
                         </v-card-text>
                       </v-card>
                     </v-col>
                   </v-row>
-                  <button class="btn">送出</button>
+                  <button class="btn" @click="handleSubmut">送出</button>
                 </v-card-text>
               </div>
           </v-card-text>
@@ -138,30 +150,47 @@ const startExam = async () => {
 <style scoped>
 
 .exam {
-  width: 80vw;
   /* height: 75vh; */
   margin: auto;
   margin-top: 70px;
+  width: 80vw;
 }
 
 .exam-title {
+  color: #FFF;
   background: #B34712 0% 0% no-repeat padding-box;
-  color: #FFFFFF;
 }
 
 .text-card {
-  border-radius: 20px 20px 0 0;
   color: #153161;
+  border-radius: 20px 20px 0 0;
+}
+
+p {
+  font-size: 28px;
+  /* font-weight: bold; */
+}
+
+h4 {
+  font-size: 24px;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
 }
 
 .btn {
-  color: #FFFFFF;
-  font-size: 20px;
+  margin-top: 50px;
   width: 100px;
   height: 50px;
+  font-size: 20px;
+  color: #FFF;
   background: #B34712 0% 0% no-repeat padding-box;
   border-radius: 25px;
   opacity: 1;
-  margin-top: 50px;
 }
 </style> 
