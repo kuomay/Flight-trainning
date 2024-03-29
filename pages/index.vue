@@ -423,8 +423,8 @@ if (regulaAndDocError.value) {
                 <div class="left-content">
                   <h5 class="font-pingfang">系統公告</h5>
                   <div v-for="announcement in systemData.systemAnnouncements" :key="announcement.id">
-                    <p class="mt-5">{{ announcement.expirationDate }}</p>
-                    <p class="mt-5">{{ announcement.title }}</p>
+                    <p class="mt-9 text-subtitle-1">{{ announcement.expirationDate }}</p>
+                    <p class="mt-3">{{ announcement.title }}</p>
                     <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.fileName" download class="mb-5 mt-5">{{ announcement.content }}</a>
                     <!-- <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.fileName" download>{{ announcement.fileName }}</a> -->
                     <v-divider></v-divider>
@@ -437,9 +437,9 @@ if (regulaAndDocError.value) {
                   <h5 class="font-pingfang">民航局公告</h5>
                   <div v-if="caaData && caaData.caaAnnouncements">
                     <div v-for="announcement in caaData.caaAnnouncements" :key="announcement.id">
-                      <p class="mt-5">{{ announcement.expirationDate }}</p>
-                      <p class="mt-5">{{ announcement.title }}</p>
-                      <p class="mb-5 mt-5">{{ announcement.content }}</p>
+                      <p class="mt-9 text-subtitle-1">{{ announcement.expirationDate }}</p>
+                      <p class="mt-3">{{ announcement.title }}</p>
+                      <p class="mb-5 mt-3">{{ announcement.content }}</p>
                       <v-divider></v-divider>
                     </div>
                   </div>
@@ -471,7 +471,7 @@ if (regulaAndDocError.value) {
               <div class="card-body">
                 <div class="right-content">
                   <div v-for="announcement in regulaAndDocData.regulationsAndDocuments" :key="announcement.id">
-                    <p class="mt-5">{{ announcement.expirationDate }}</p>
+                    <p class="mt-5 text-subtitle-1">{{ announcement.expirationDate }}</p>
                     <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.content" download class="mt-5 mb-5">{{ announcement.title }}</a>
                     <v-divider></v-divider>
                   </div>
@@ -603,6 +603,7 @@ h5 {
   color: #B34712;
   text-decoration: underline;
   text-underline-offset: 1rem;
+  text-decoration-thickness: 0.15em;
 }
 
 .button-container {

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {useExamStore} from '@/stores/exam'
+
+// const useExam = useExamStore()
+// const { setUserName } = storeToRefs(useExam)
+
 const tab = ref(null);
 // definePageMeta({
 //   middleware: [

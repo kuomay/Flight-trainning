@@ -9,8 +9,11 @@ export const useExamStore = defineStore('exam',()=>{
   
   const storeAccount = ref('')
 
+  const storeName = ref('')
+
   return {
     addExamData,
-    storeAccount
+    storeAccount,
+    storeName
   }
 });

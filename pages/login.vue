@@ -5,6 +5,8 @@ import {useExamStore} from '@/stores/exam'
 
 const useExam = useExamStore()
 const {storeAccount} = storeToRefs(useExam)
+// const {storeName} = storeToRefs(useExam)
+
 
 const router = useRouter()
 
@@ -70,9 +72,10 @@ const handleSubmit = async () => {
             })
         })
         console.log(response)
-
+   
         if (response.data._rawValue.MSG === "ok") {
             console.log("登入成功！");
+            
             console.log("userAccount",userAccount.value)
             // getCookie('.AspNetCore.Cookies', 'CfDJ8Bg7GM5dk4REniPx3S-Pwm4uuYUSqWVNHP_Cx0RY2r8yZySWCkX1KnarXcWhk5DDdpLB7gHbGkDdM224DERxIBGsfkBmU0sLh50Qp6vATVmqlRd9k_dJhfRDrhsPSuvMyL2eLuwccYMtLRbFKCQiTesp-cLO_wPIMIWi3bmyA3iwytSatYPY2-7z4kaxWRnu5aO-9SZp_cfo4ucAk9wiWrlFkiVaG6X_4olfbXSyQk-Vhkg1aZS_dppbYEanY3AOCSexvcs_QI-RNBTVFkOwTFoTn7izWvuTt1r3Cwb2NxZi36Pj3K6LS-Fij8-7AfNQ18zJPbq8xo9rMCL2ap8sw8_qm459ofmgljvh213oxNUFyDyCv68pGZqPkNyj3k9CJQ', 7);
             router.push('/flight')
