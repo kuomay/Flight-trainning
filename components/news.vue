@@ -1,13 +1,13 @@
 <script setup>
-onMounted(() => {
-  const { data: trainingSessionsResponse, error: trainingSessionsError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
-  const trainingSessions = trainingSessionsResponse;
-  console.log(trainingSessions);
 
-  if (trainingSessionsError.value) {
-    console.error('Error fetching system data:', trainingSessionsError.value);
-  }
+const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
+console.log(response.data._rawValue);
+
+response.data._rawValue.trainingSessions.forEach((item) => {
+    console.log(item.name);
 });
+
+
 </script>
 
 <template>
@@ -16,13 +16,13 @@ onMounted(() => {
             <div class="news-title"> 
                 <h2 style="padding: 1.5rem;">訊息列表</h2>
             </div>
-            <div class="news-content">
-                <Nuxt-link to="/news-detail" class="news-link">第一梯次教育訓練(北部班次)</Nuxt-link>
+            <div class="news-content" v-for="item in response.data._rawValue.trainingSessions" v-if="response">
+                <Nuxt-link to="/news-detail" class="news-link">{{ item.name }}</Nuxt-link>
                 <ul>
                     <li class="mt-3"><strong>期程:</strong></li>
-                    <li><strong>班別:</strong> 無人機多旋翼機班</li>
-                    <li><strong>學科考場:</strong> 台北海洋科技大學</li>
-                    <li><strong>術科考場:</strong> 新北市急難救援大隊術科考場</li>
+                    <li><strong>班別:</strong> {{ item.classType }}</li>
+                    <li><strong>學科考場:</strong> {{ item.academicTestLocation }}</li>
+                    <li><strong>術科考場:</strong> {{ item.technicalTestLocation }}</li>
                 </ul>
             </div>
         </v-card>
