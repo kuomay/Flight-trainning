@@ -4,7 +4,7 @@ const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXS
 console.log(response.data._rawValue);
 
 response.data._rawValue.trainingSessions.forEach((item) => {
-    console.log(item.name);
+    console.log(item);
 });
 
 const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessions/'

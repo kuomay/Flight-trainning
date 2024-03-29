@@ -3,6 +3,12 @@ definePageMeta({
     layout: 'header'
 })
 
+const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystem');
+console.log(response);
+
+response.data._rawValue.systemAnnouncements.forEach((item) => {
+    console.log(item);
+});
 
 </script>
 
@@ -12,15 +18,15 @@ definePageMeta({
             <div class="system-data-title"> 
                 <h2 style="padding: 1rem;">系統公告</h2>
             </div>
-            <div class="system-data-content">
-                <!-- <div v-for="announcement in systemData.systemAnnouncements" :key="announcement.id">
-                    <p class="mt-5">{{ announcement.expirationDate }}</p>
-                    <p class="mt-5">{{ announcement.title }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.fileName }}</p>
-                    <v-divider></v-divider>
-                  </div> -->
-            </div>
+            <p>68</p>
+            <!-- <div class="system-data-content" v-for="item in response.data._rawValue.systemAnnouncements" v-if="response">
+                <p>{{ item.id }}</p>
+                <ul>
+                    <li class="mt-3"><strong>期程:{{ item.content }}</strong></li>
+                    <li><strong>班別:</strong> {{ item.fileName }}</li>
+                    <li><strong>學科考場:</strong> {{ item.expirationDate }}</li>
+                </ul>
+            </div> -->
         </v-card>
     </div>
 </template>
