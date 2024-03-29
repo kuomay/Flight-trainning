@@ -4,6 +4,21 @@ import { useExamStore } from '@/stores/exam';
 
 const store = useExamStore();
 const examTypes = ['普通操作證學科測驗', '專業操作證學科測驗'];
+const examConfig = {
+  '普通操作證學科測驗': {
+    passScore: 80,
+    questionCount: 20,
+    deduction: 5,
+    duration: '30分鐘'
+  },
+  '專業操作證學科測驗': {
+    passScore: 80,
+    questionCount: 40,
+    deduction: 2.5,
+    duration: '1小時'
+  }
+};
+// const examTypes = Object.keys(examConfig);
 const selectedExamType = ref(examTypes[0]);
 const examStarted = ref(false);
 const countdown = ref(0);
@@ -40,7 +55,7 @@ const handleSubmut = () => {
 const startExam = async () => {
   examStarted.value = true;
 
-  countdown.value = 10 * 1;
+  countdown.value = examConfig[selectedExamType.value].duration === '30分鐘' ? 30 * 60 : 60 * 60;
 
   try {
     let apiUrl;
@@ -84,66 +99,60 @@ const startExam = async () => {
 </script>
 
 <template>
-   <div class="container">
+  <div class="container">
     <div class="exam" v-if="!examStarted">
-    <v-card class="text-card">
-                <v-select
-                    class="exam-title font-weight-bold"
-                    v-model="selectedExamType"
-                    label="請選擇學科測驗種類"
-                    :items="examTypes"
-                ></v-select>
-                  <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
-                  <h4 class="mt-5 ml-5">合格標準 : 80 (滿分100)</h4>
-                  <h4 class="mt-3 ml-5">測驗題數 : 20</h4>
-                  <h4 class="mt-3 ml-5">單題扣分 : 5 </h4>
-                  <button class="btn ml-5 mb-6" @click="startExam">開始測驗</button>
-                  <v-divider></v-divider>
-                </v-card>
-              </div>
+      <v-card class="text-card">
+        <v-select
+          class="exam-title font-weight-bold"
+          v-model="selectedExamType"
+          label="請選擇學科測驗種類"
+          :items="examTypes"
+        ></v-select>
+        <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
+        <h4 class="mt-5 ml-5">合格標準 : {{ examConfig[selectedExamType].passScore }} (滿分100)</h4>
+        <h4 class="mt-3 ml-5">測驗題數 : {{ examConfig[selectedExamType].questionCount }}</h4>
+        <h4 class="mt-3 ml-5">單題扣分 : {{ examConfig[selectedExamType].deduction }} </h4>
+        <h4 class="mt-3 ml-5">測驗時間 : {{ examConfig[selectedExamType].duration }}</h4>
+        <button class="btn ml-5 mb-6" @click="startExam">開始測驗</button>
+        <v-divider></v-divider>
+      </v-card>
+    </div>
 
-    
-      <v-card>
-          <v-card-text v-if="examStarted">
-              <div class="exam">
-                <v-card class="text-card">
-                <div class="exam-title d-flex justify-space-between"> 
-                  <h2 style="padding: 1rem;">{{ selectedExamType }}</h2>
-                  <h2 class="mt-4 mr-5">倒數計時: {{ Math.floor(countdown / 60) }} 分 {{ countdown % 60 }} 秒</h2>
-                </div>
-                 
-                  <v-divider></v-divider>
-                  <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
-                  <h4 class="mt-5 ml-5">合格標準 : 80 (滿分100)</h4>
-                  <h4 class="mt-3 ml-5">測驗題數 : 25</h4>
-                  <h4 class="mb-5 mt-3 ml-5">單題扣分 : 4 </h4>
-                  <p class="mb-5 mt-2 ml-5 font-weight-bold"  :class="{ 'green-text': totalScore >= 80, 'red-text': totalScore < 80 }" v-if="isSubmit">總分：{{ totalScore }}</p>
-                  <v-divider></v-divider>
+    <v-card v-else>
+      <v-card-text>
+        <div class="exam">
+          <v-card class="text-card">
+            <div class="exam-title d-flex justify-space-between">
+              <h2 style="padding: 1rem;">{{ selectedExamType }}</h2>
+              <h2 class="mt-4 mr-5">倒數計時: {{ Math.floor(countdown / 60) }} 分 {{ countdown % 60 }} 秒</h2>
+            </div>
+            <v-divider></v-divider>
+            <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
+            <h4 class="mt-5 ml-5">合格標準 : {{ examConfig[selectedExamType].passScore }} (滿分100)</h4>
+            <h4 class="mt-3 ml-5">測驗題數 : {{ examConfig[selectedExamType].questionCount }}</h4>
+            <h4 class="mb-5 mt-3 ml-5">單題扣分 : {{ examConfig[selectedExamType].deduction }} </h4>
+            <p class="mb-5 mt-2 ml-5 font-weight-bold"  :class="{ 'green-text': totalScore >= 80, 'red-text': totalScore < 80 }" v-if="isSubmit">總分：{{ totalScore }}</p>
+            <v-divider></v-divider>
+          </v-card>
+          <v-card-text>
+            <v-row>
+              <v-col v-for="(exam, index) in examList" :key="exam.id" cols="12">
+                <v-card>
+                  <v-card-title class="font-weight-bold">({{ index + 1 }}) {{ exam.title }}</v-card-title>
+                  <v-card-text>
+                    <v-radio-group v-model="userAns[index]" :options="exam.options" :disabled="isSubmit">
+                      <v-radio v-for="(option, key) in exam.options" :key="key" :label="option" :value="key"></v-radio>
+                    </v-radio-group>
+                    <v-alert type="error" v-if="((!userAns[index] || userAns[index].toUpperCase() !== exam.answer) || userAns[index] === null) && isSubmit">正確答案 : {{ exam.answer }}</v-alert>
+                  </v-card-text>
                 </v-card>
-                <v-card-text>
-                  <v-row>
-                    <v-col v-for="(exam, index) in examList" :key="exam.id" cols="12">
-                      <v-card>
-                        <v-card-title class="font-weight-bold">({{ index + 1 }}) {{ exam.title }}</v-card-title>
-                        <v-card-text>
-                          <v-radio-group v-model="userAns[index]" :options="exam.options" :disabled="isSubmit">
-                            <v-radio
-                              v-for="(option, key) in exam.options"
-                              :key="key"
-                              :label="option"
-                              :value="key"
-                            ></v-radio>
-                          </v-radio-group>
-                          <v-alert type="error" v-if="((!userAns[index] || userAns[index].toUpperCase() !== exam.answer) || userAns[index] === null) && isSubmit">正確答案 : {{ exam.answer }}</v-alert>
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                  <button class="btn" @click="handleSubmut">送出</button>
-                </v-card-text>
-              </div>
+              </v-col>
+            </v-row>
+            <button class="btn" @click="handleSubmut">送出</button>
           </v-card-text>
-        </v-card>
+        </div>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 

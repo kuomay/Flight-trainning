@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue'
 import banner from 'assets/images/banner.jpg'
 import taipei from 'assets/images/map/组 1147.png'
 import kinmen from 'assets/images/map/组 1148.png'
@@ -334,6 +333,16 @@ const venuePhotos = [
       photoUrl:
       "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3612.120521264688!2d121.75103617605279!3d25.131615934352528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjXCsDA3JzUzLjgiTiAxMjHCsDQ1JzEzLjAiRQ!5e0!3m2!1szh-TW!2stw!4v1710404097828!5m2!1szh-TW!2stw"
     },
+    {
+      venueOptions: '鹿鳴學科考場',
+      photoUrl:
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3675.453286161595!2d121.10002407600543!3d22.896645921014535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDUzJzQ3LjkiTiAxMjHCsDA2JzA5LjQiRQ!5e0!3m2!1szh-TW!2stw!4v1711539235830!5m2!1szh-TW!2stw"
+    },
+    {
+      venueOptions: '鹿鳴術科考場',
+      photoUrl:
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3675.453286161595!2d121.10002407600543!3d22.896645921014535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDUzJzQ3LjkiTiAxMjHCsDA2JzA5LjQiRQ!5e0!3m2!1szh-TW!2stw!4v1711539235830!5m2!1szh-TW!2stw"
+    }
   ];
 
   const venues = computed(() => {
@@ -351,6 +360,7 @@ const venuePhotos = [
 
 const { data: systemDataResponse, error: systemError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystemRow/2');
 const systemData = systemDataResponse;
+console.log(systemData);
 
 const { data: caaDataResponse, error: caaError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetCaaRow/2');
 const caaData = caaDataResponse;
@@ -367,8 +377,6 @@ if (caaError.value) {
 if (regulaAndDocError.value) {
   console.error('Error fetching regula and doc data:', regulaAndDocError.value);
 }
-
-
 </script>
 
 <template>
@@ -417,23 +425,26 @@ if (regulaAndDocError.value) {
                   <div v-for="announcement in systemData.systemAnnouncements" :key="announcement.id">
                     <p class="mt-5">{{ announcement.expirationDate }}</p>
                     <p class="mt-5">{{ announcement.title }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
+                    <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.fileName" download class="mb-5 mt-5">{{ announcement.content }}</a>
+                    <!-- <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.fileName" download>{{ announcement.fileName }}</a> -->
                     <v-divider></v-divider>
                   </div>
                   <div class="button-container">
-                    <a href="#" class="btn btn-primary">更多</a>
+                    <Nuxt-link to="/systemData" class="btn btn-primary">更多</Nuxt-link>
                   </div>
                 </div>
                 <div class="right-content">
                   <h5 class="font-pingfang">民航局公告</h5>
-                  <div v-for="announcement in caaData.caaAnnouncements" :key="announcement.id">
-                    <p class="mt-5">{{ announcement.expirationDate }}</p>
-                    <p class="mt-5">{{ announcement.title }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
-                    <v-divider></v-divider>
+                  <div v-if="caaData && caaData.caaAnnouncements">
+                    <div v-for="announcement in caaData.caaAnnouncements" :key="announcement.id">
+                      <p class="mt-5">{{ announcement.expirationDate }}</p>
+                      <p class="mt-5">{{ announcement.title }}</p>
+                      <p class="mb-5 mt-5">{{ announcement.content }}</p>
+                      <v-divider></v-divider>
+                    </div>
                   </div>
                   <div class="button-container">
-                    <a href="#" class="btn btn-primary">更多</a>
+                    <Nuxt-link to="/caaData" class="btn btn-primary">更多</Nuxt-link>
                   </div>
                 </div>
               </div>
@@ -461,12 +472,11 @@ if (regulaAndDocError.value) {
                 <div class="right-content">
                   <div v-for="announcement in regulaAndDocData.regulationsAndDocuments" :key="announcement.id">
                     <p class="mt-5">{{ announcement.expirationDate }}</p>
-                    <p class="mt-5">{{ announcement.title }}</p>
-                    <p class="mb-10 mt-5">{{ announcement.content }}</p>
+                    <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + announcement.content" download class="mt-5 mb-5">{{ announcement.title }}</a>
                     <v-divider></v-divider>
                   </div>
                   <div class="button-container">
-                    <a href="#" class="btn btn-primary">更多</a>
+                    <Nuxt-link to="/regulaAndDocData" class="btn btn-primary">更多</Nuxt-link>
                   </div>
                 </div>
               </div>
@@ -547,7 +557,7 @@ if (regulaAndDocError.value) {
 
 .custom-card-left {
   width: 60vw; /* 70% of the viewport's width */
-  height: 75vh; /* 50% of the viewport's height */
+  height: 70vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px; /* 添加左边卡片的圆角 */
   margin-bottom: 100px;
@@ -555,7 +565,7 @@ if (regulaAndDocError.value) {
 
 .custom-card-right {
   width: 33vw; /* 30% of the viewport's width */
-  height: 75vh; /* 50% of the viewport's height */
+  height: 70vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px
 }

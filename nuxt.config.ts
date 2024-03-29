@@ -2,6 +2,11 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   //...
+  app: {
+    // todo baseURL: '/Nuxt/',
+    baseURL: '/',
+    // buildAssetsDir: '/Nuxt/public/'
+  },
   css: ['@/assets/scss/global.scss'],
   build: {
     transpile: ['vuetify']

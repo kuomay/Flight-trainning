@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import {useExamStore} from '@/stores/exam'
 
 const useExam = useExamStore()
-const storeAccount = storeToRefs(useExam)
+const {storeAccount} = storeToRefs(useExam)
 
 const userOldPassword = ref('');
 const userNewPassword = ref('');
@@ -50,35 +50,37 @@ const handleRevise = async () => {
     return;
   }
 
+
   const data = {
-    oldPassword: userOldPassword.value,
-    password: userNewPassword.value,
-    account: storeAccount.value
+    account: storeAccount.value,
+    OldPassword: userOldPassword.value,
+    Password: userNewPassword.value,
   };
 
-  console.log(data);
+  const jsonData = JSON.stringify(data);
 
-  // try {
-  //   const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login', {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: data
-  //   });
+  console.log(jsonData);
 
-  //   console.log(response);
 
-  //   if (response.ok) {
-  //     alert('修改完成');
-  //   } else {
-  //     throw new Error('修改失敗');
-  //   }
-  // } catch (error) {
-  //   console.error('Error updating password:', error);
-  //   alert('修改密碼時錯誤');
-  // }
+  try {
+    const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/ChgPW', {
+      method: 'PUT',
+      body: jsonData
+    });
+
+    console.log(response);
+
+    if (response.data._rawValue.MSG === 'ok') {
+      alert('修改完成');
+    } else {
+      throw new Error('修改失敗');
+    }
+  } catch (error) {
+    console.error('Error updating password:', error);
+    alert('修改密碼時錯誤');
+  }
 };
+
 </script>
 
 <template>

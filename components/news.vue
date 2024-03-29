@@ -1,4 +1,13 @@
-<script>
+<script setup>
+onMounted(() => {
+  const { data: trainingSessionsResponse, error: trainingSessionsError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
+  const trainingSessions = trainingSessionsResponse;
+  console.log(trainingSessions);
+
+  if (trainingSessionsError.value) {
+    console.error('Error fetching system data:', trainingSessionsError.value);
+  }
+});
 </script>
 
 <template>
@@ -8,9 +17,9 @@
                 <h2 style="padding: 1.5rem;">訊息列表</h2>
             </div>
             <div class="news-content">
-                <h3>第一梯次教育訓練(北部班次)</h3>
+                <Nuxt-link to="/news-detail" class="news-link">第一梯次教育訓練(北部班次)</Nuxt-link>
                 <ul>
-                    <li><strong>期程:</strong> 113年4月8日至4月19日</li>
+                    <li class="mt-3"><strong>期程:</strong></li>
                     <li><strong>班別:</strong> 無人機多旋翼機班</li>
                     <li><strong>學科考場:</strong> 台北海洋科技大學</li>
                     <li><strong>術科考場:</strong> 新北市急難救援大隊術科考場</li>
@@ -44,12 +53,17 @@
   padding: 1rem;
 }
 
-.news-content h3 {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.news-link {
+  text-decoration: none; /* 去除下划线 */
+  /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
   font-size: 35px;
   color: #153161;
+  font-weight: bold;
+}
 
+.news-link:hover {
+  color: #FFA500; /* 修改为您想要的悬停颜色 */
 }
 
 .news-content ul {

@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import {useExamStore} from '@/stores/exam'
 
 const useExam = useExamStore()
-const storeAccount = storeToRefs(useExam)
+const {storeAccount} = storeToRefs(useExam)
 
 const router = useRouter()
 
@@ -36,6 +36,16 @@ const InterimPasswordRules = [
   }
 ];
 
+// const getCookie = (name, value, days) => {
+//     let expires = '';
+//     if (days) {
+//         const date = new Date();
+//         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+//         expires = `; expires=${date.toUTCString()}`;
+//     }
+//     const secureFlag = location.protocol === 'https:' ? '; Secure' : ''; 
+//     document.cookie = `${name}=${value}${expires}; HttpOnly${secureFlag}`; 
+// };
 
 
 const handleSubmit = async () => {
@@ -51,7 +61,7 @@ const handleSubmit = async () => {
     }
 
     try {
-        const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login', {
+        const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginChk', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -61,14 +71,12 @@ const handleSubmit = async () => {
         })
         console.log(response)
 
-        if (response.data.value === "ok") {
+        if (response.data._rawValue.MSG === "ok") {
             console.log("登入成功！");
-            localStorage.setItem('isLoggedIn', true);
-            storeAccount.value = userAccount.value
+            console.log("userAccount",userAccount.value)
+            // getCookie('.AspNetCore.Cookies', 'CfDJ8Bg7GM5dk4REniPx3S-Pwm4uuYUSqWVNHP_Cx0RY2r8yZySWCkX1KnarXcWhk5DDdpLB7gHbGkDdM224DERxIBGsfkBmU0sLh50Qp6vATVmqlRd9k_dJhfRDrhsPSuvMyL2eLuwccYMtLRbFKCQiTesp-cLO_wPIMIWi3bmyA3iwytSatYPY2-7z4kaxWRnu5aO-9SZp_cfo4ucAk9wiWrlFkiVaG6X_4olfbXSyQk-Vhkg1aZS_dppbYEanY3AOCSexvcs_QI-RNBTVFkOwTFoTn7izWvuTt1r3Cwb2NxZi36Pj3K6LS-Fij8-7AfNQ18zJPbq8xo9rMCL2ap8sw8_qm459ofmgljvh213oxNUFyDyCv68pGZqPkNyj3k9CJQ', 7);
             router.push('/flight')
-            console.log('jump')
-            // 例如，可以跳转到其他页面
-        } else if (response.data.value === "帳號密碼錯誤") {
+        } else if (response.data._rawValue.MSG === "帳號密碼錯誤") {
             console.log("帳號或密碼错误！");
             alert('登入失敗，請檢查您的帳號或密碼');
         }
@@ -78,6 +86,7 @@ const handleSubmit = async () => {
     }
 };
 
+
 const handleForgotPassword = () => {
     isForget.value = !isForget.value
 };
@@ -85,7 +94,10 @@ const handleForgotPassword = () => {
 const isForget = ref(false)
 
 
-
+watch(userAccount, (newVal, oldVal) => {
+      storeAccount.value = newVal
+  }
+)
 </script>
 
 
@@ -121,7 +133,7 @@ const isForget = ref(false)
                   type="password"
               ></v-text-field>
               <div class="btn mb-16">
-                  <v-btn type="submit" class="" block>完成</v-btn>
+                  <v-btn type="submit" class="" block>登入</v-btn>
               </div>
           </form>
         </v-card>
