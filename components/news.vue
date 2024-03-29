@@ -1,5 +1,4 @@
 <script setup>
-
 const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
 console.log(response.data._rawValue);
 
@@ -17,7 +16,7 @@ const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessi
                 <h2 style="padding: 1.5rem;">訊息列表</h2>
             </div>
             <div class="news-content" v-for="item in response.data._rawValue.trainingSessions" v-if="response">
-                <Nuxt-link :to="url" class="news-link">{{ item.name }}</Nuxt-link>
+                <newsDetail :name="item.name" :id="item.id"/>
                 <ul>
                     <li class="mt-3"><strong>期程:{{ item.period }}</strong></li>
                     <li><strong>班別:</strong> {{ item.classType }}</li>
