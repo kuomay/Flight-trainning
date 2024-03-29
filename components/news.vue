@@ -1,13 +1,13 @@
 <script setup>
-onMounted(() => {
-  const { data: trainingSessionsResponse, error: trainingSessionsError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
-  const trainingSessions = trainingSessionsResponse;
-  console.log(trainingSessions);
 
-  if (trainingSessionsError.value) {
-    console.error('Error fetching system data:', trainingSessionsError.value);
-  }
+const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
+console.log(response.data._rawValue);
+
+response.data._rawValue.trainingSessions.forEach((item) => {
+    console.log(item.name);
 });
+
+const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessions/'
 </script>
 
 <template>
@@ -16,13 +16,13 @@ onMounted(() => {
             <div class="news-title"> 
                 <h2 style="padding: 1.5rem;">訊息列表</h2>
             </div>
-            <div class="news-content">
-                <Nuxt-link to="/news-detail" class="news-link">第一梯次教育訓練(北部班次)</Nuxt-link>
+            <div class="news-content" v-for="item in response.data._rawValue.trainingSessions" v-if="response">
+                <Nuxt-link :to="url" class="news-link">{{ item.name }}</Nuxt-link>
                 <ul>
-                    <li class="mt-3"><strong>期程:</strong></li>
-                    <li><strong>班別:</strong> 無人機多旋翼機班</li>
-                    <li><strong>學科考場:</strong> 台北海洋科技大學</li>
-                    <li><strong>術科考場:</strong> 新北市急難救援大隊術科考場</li>
+                    <li class="mt-3"><strong>期程:{{ item.period }}</strong></li>
+                    <li><strong>班別:</strong> {{ item.classType }}</li>
+                    <li><strong>學科考場:</strong> {{ item.academicTestLocation }}</li>
+                    <li><strong>術科考場:</strong> {{ item.technicalTestLocation }}</li>
                 </ul>
             </div>
         </v-card>
@@ -33,7 +33,6 @@ onMounted(() => {
 
 .news {
   width: 80vw;
-  height: 75vh;
   margin: auto;
   margin-top: 70px;
 }
@@ -41,22 +40,30 @@ onMounted(() => {
 .news-title {
   background: #B34712;
   color: #FFFFFF;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .text-card {
   border-radius: 20px 20px 0 0;
   color: #000000;
   font-size: 18px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* 為卡片添加陰影效果 */
+  transition: 0.3s; /* 添加過渡效果 */
+}
+.text-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* 當滑鼠懸停時增加陰影 */
 }
 
 .news-content {
   padding: 1rem;
+  border-bottom: 1px solid #dee2e6; /* 添加底部邊框作為分隔線 */
+  padding-bottom: 1rem; /* 添加底部內距以增加分隔線與內容之間的空間 */
+  margin-bottom: 1rem; 
+  line-height: 1.5;
 }
 
 .news-link {
-  text-decoration: none; /* 去除下划线 */
-  /* margin-top: 20px; */
-  /* margin-bottom: 20px; */
+  text-decoration: none; 
   font-size: 35px;
   color: #153161;
   font-weight: bold;
@@ -69,6 +76,7 @@ onMounted(() => {
 .news-content ul {
   list-style: none;
   padding: 0;
+  margin-top: 1rem;
 }
 
 .news-content ul li {
