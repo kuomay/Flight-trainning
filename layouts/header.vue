@@ -10,10 +10,8 @@
         <v-sheet class="title font-pingfang text-white" color="transparent">
           飛行教育資源平台
         </v-sheet>
-        <!-- <h4 class="member-name">李學員</h4> -->
         <v-sheet class="login-icon" color="transparent">
-          <!-- <img class="mr-9" src="/assets/images/icon/组 25.png" /> -->
-          <img src="/assets/images/icon/组 4.png" />
+          <!-- <img src="/assets/images/icon/组 4.png" /> -->
         </v-sheet>
     </div>
   </div>

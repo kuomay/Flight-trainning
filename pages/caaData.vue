@@ -1,7 +1,14 @@
-<script>
+<script setup>
 definePageMeta({
     layout: 'header'
 })
+
+const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetCaa');
+// console.log(response);
+
+response.data._rawValue.caaAnnouncements.forEach((item) => {
+    console.log(item);
+});
 </script>
 
 <template>
@@ -10,9 +17,13 @@ definePageMeta({
             <div class="caa-data-title"> 
                 <h2 style="padding: 1rem;">民航局公告</h2>
             </div>
-            <div class="caa-data-content">
+              <div class="caa-data-content" v-for="item in response.data._rawValue.caaAnnouncements" v-if="response">
+                      <p class="mt-9 text-subtitle-1">{{ item.expirationDate }}</p>
+                      <p class="mt-3">{{ item.title }}</p>
+                      <p  class="mb-5 mt-5">{{ item.content }}</p>
+                      <v-divider></v-divider>
+              </div>
 
-            </div>
         </v-card>
     </div>
 </template>

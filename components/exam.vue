@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useExamStore } from '@/stores/exam';
 
 const store = useExamStore();
+const storeName = ref('');
+
 const examTypes = ['普通操作證學科測驗', '專業操作證學科測驗'];
 const examConfig = {
   '普通操作證學科測驗': {
@@ -22,6 +24,9 @@ const examConfig = {
 const selectedExamType = ref(examTypes[0]);
 const examStarted = ref(false);
 const countdown = ref(0);
+const userAns = reactive([])
+const totalScore = ref(0);
+const isSubmit = ref(false);
 const examList = ref([
   {
     id: 'uniqueId1',
@@ -36,22 +41,9 @@ const examList = ref([
   },
 ]);
 
-const userAns = reactive([])
-const totalScore = ref(0);
-
-const isSubmit = ref(false);
-const handleSubmut = () => {
-  console.log(userAns)
-  isSubmit.value = true;
-  console.log(typeof(userAns[0]))
-  examList.value.forEach((exam, index) => {
-    if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
-      totalScore.value += 4;
-    } 
-    console.log(store.score.value)
-  });
-}
-
+onMounted(() => {
+  storeName.value = localStorage.getItem('name') || '未知';
+});
 const startExam = async () => {
   examStarted.value = true;
 
@@ -60,9 +52,9 @@ const startExam = async () => {
   try {
     let apiUrl;
     if (selectedExamType.value === '普通操作證學科測驗') {
-      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/0/25';
+      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/0/20';
     } else if (selectedExamType.value === '專業操作證學科測驗') {
-      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/1/25';
+      apiUrl = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetQuestionsWithType/1/40';
     }
 
     const response = await useFetch(apiUrl, {
@@ -87,14 +79,66 @@ const startExam = async () => {
       store.addExamData(examList.value);
       isSubmit.value = true;
       examList.value.forEach((exam, index) => {
-        if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
-          totalScore.value += 4;
-        } 
-      });
+      if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
+        totalScore.value += 100 / examConfig[selectedExamType.value].questionCount;
+      } else {
+        // 根據考試類型扣分
+        if (selectedExamType.value === '普通學科測驗') {
+          totalScore.value -= 5;
+        } else if (selectedExamType.value === '專業學科測驗') {
+          totalScore.value -= 2.5;
+        }
+      }
+    });
     }
   }, 1000);
 };
 
+
+const handleSubmut = async () => {
+  const formData = {
+    "userID": storeName.value,
+    "userTranscript": 0,
+    "transcriptSelect": examList.value
+  }
+
+  // console.log('eamlist', examList.value)
+  // console.log('formdata', formData)
+  try {
+    const response = await fetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/UploadTranscript', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+
+    // console.log(response.ok)
+
+    // 檢查回應是否為 OK，如果不是，則拋出錯誤
+    if (response.ok === "true") {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation: ' + error.message);
+    }
+  // console.log(formData)
+  isSubmit.value = true;
+  countdown.value = null;
+  // console.log(typeof(userAns[0]))
+  examList.value.forEach((exam, index) => {
+    if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
+      totalScore.value += 100 / examConfig[selectedExamType.value].questionCount;
+    } else {
+      // 根據考試類型扣分
+      if (selectedExamType.value === '普通學科測驗') {
+        totalScore.value -= 5;
+      } else if (selectedExamType.value === '專業學科測驗') {
+        totalScore.value -= 2.5;
+      }
+    }
+  });
+}
 
 </script>
 
@@ -124,7 +168,7 @@ const startExam = async () => {
           <v-card class="text-card">
             <div class="exam-title d-flex justify-space-between">
               <h2 style="padding: 1rem;">{{ selectedExamType }}</h2>
-              <h2 class="mt-4 mr-5">倒數計時: {{ Math.floor(countdown / 60) }} 分 {{ countdown % 60 }} 秒</h2>
+              <h2 class="mt-4 mr-5" v-if="countdown > 0">倒數計時: {{ Math.floor(countdown / 60) }} 分 {{ countdown % 60 }} 秒</h2>
             </div>
             <v-divider></v-divider>
             <p class="mt-5 ml-5 font-weight-bold">學科測驗計分方式</p>
@@ -140,7 +184,7 @@ const startExam = async () => {
                 <v-card>
                   <v-card-title class="font-weight-bold">({{ index + 1 }}) {{ exam.title }}</v-card-title>
                   <v-card-text>
-                    <v-radio-group v-model="userAns[index]" :options="exam.options" :disabled="isSubmit">
+                    <v-radio-group v-model="examList[index].userAns" :options="exam.options" :disabled="isSubmit">
                       <v-radio v-for="(option, key) in exam.options" :key="key" :label="option" :value="key"></v-radio>
                     </v-radio-group>
                     <v-alert type="error" v-if="((!userAns[index] || userAns[index].toUpperCase() !== exam.answer) || userAns[index] === null) && isSubmit">正確答案 : {{ exam.answer }}</v-alert>

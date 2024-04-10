@@ -21,15 +21,15 @@ const items = ref([
   {
     src: banner
   },
-  {
-    src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-  },
-  {
-    src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-  },
-  {
-    src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-  }
+  // {
+  //   src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
+  // },
+  // {
+  //   src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
+  // },
+  // {
+  //   src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
+  // }
 ])
 
 import { ref, computed } from 'vue';
@@ -41,11 +41,10 @@ const selectedVenue = ref('臺北市民航局行政大樓術科考場');
 const cityOptions = {
   '北': ['臺北市', '新北市', '宜蘭市', '桃園市', '新竹縣', '基隆市'],
   '中': ['台中市', '苗栗縣'],
-  '南': ['嘉義市','雲林縣','台南縣','屏東縣', '高雄市'],
+  '南': ['嘉義市','雲林縣','台南市','屏東縣', '高雄市'],
   '東': ['花蓮縣', '台東縣'],
   '離島': ['金門縣']
 };
-
 
 const cityImageMap = {
   '臺北市': taipei,
@@ -58,7 +57,7 @@ const cityImageMap = {
   '苗栗縣': Miaoli,
   '嘉義市': Chiayi,
   '雲林縣': Yunlin,
-  '台南縣': Tainan,
+  '台南市': Tainan,
   '屏東縣': Pingtung,
   '高雄市': Kaohsiung,
   '花蓮縣': Hualien,
@@ -68,6 +67,10 @@ const cityImageMap = {
 
 const cities = computed(() => {
   return cityOptions[selectedRegion.value] || [];
+});
+
+watch(selectedRegion, () => {
+  selectedCity.value = cities.value[0];
 });
 
 const venueOptions = {
@@ -142,6 +145,10 @@ const venuePhotos = [
       venueOptions: '民航局學科考場',
       photoUrl:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1806269538383!2d121.54941947605134!3d25.06186633716756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abf1cf9f0e57%3A0x721005047f0b1a0c!2zMTA15Y-w5YyX5biC5p2-5bGx5Y2A5pWm5YyW5YyX6LevMzQw6Jmf!5e0!3m2!1szh-TW!2stw!4v1710398613946!5m2!1szh-TW!2stw"
+    },
+    {
+      venueOptions: '新北市大新店飛行場術科考場',
+      photoUrl:"https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3616.9729529424576!2d121.51556507604924!3d24.9670348409835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjTCsDU4JzAxLjMiTiAxMjHCsDMxJzA1LjMiRQ!5e0!3m2!1szh-TW!2stw!4v1711936861296!5m2!1szh-TW!2stw"
     },
     {
       venueOptions: '中國科大學科考場',
@@ -266,12 +273,12 @@ const venuePhotos = [
     {
       venueOptions: '遠東科大學科考場',
       photoUrl:
-      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3626.1675682501823!2d120.84063707604219!3d24.65235985355182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjTCsDM5JzA4LjUiTiAxMjDCsDUwJzM1LjYiRQ!5e0!3m2!1szh-TW!2stw!4v1710402345948!5m2!1szh-TW!2stw" 
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3670.850090376068!2d120.29432007600897!3d23.065956914706547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDAzJzU3LjQiTiAxMjDCsDE3JzQ4LjgiRQ!5e0!3m2!1szh-TW!2stw!4v1712022229992!5m2!1szh-TW!2stw" 
     },
     {
-      venueOptions: '遠東科技大術科考場',
+      venueOptions: '遠東科技大學術科考場',
       photoUrl:
-      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3670.850090376068!2d120.29432007600897!3d23.065956914706547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDAzJzU3LjQiTiAxMjDCsDE3JzQ4LjgiRQ!5e0!3m2!1szh-TW!2stw!4v1710402808259!5m2!1szh-TW!2stw"
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3670.850090376068!2d120.29432007600897!3d23.065956914706547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDAzJzU3LjQiTiAxMjDCsDE3JzQ4LjgiRQ!5e0!3m2!1szh-TW!2stw!4v1712022229992!5m2!1szh-TW!2stw" 
     },
     {
       venueOptions: '實踐大學高雄校區學科考場',
@@ -345,8 +352,12 @@ const venuePhotos = [
     }
   ];
 
-  const venues = computed(() => {
+const venues = computed(() => {
   return venueOptions[selectedCity.value]?.[selectedDepartment.value] || [];
+});
+
+watch([selectedCity, selectedDepartment], () => {
+  selectedVenue.value = venues.value[0];
 });
 
   const selectedVenuePhotoUrl = computed(() => {
@@ -356,6 +367,7 @@ const venuePhotos = [
   }
   return null;
 });
+
 
 
 const { data: systemDataResponse, error: systemError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystemRow/2');
@@ -439,7 +451,7 @@ if (regulaAndDocError.value) {
                     <div v-for="announcement in caaData.caaAnnouncements" :key="announcement.id">
                       <p class="mt-9 text-subtitle-1">{{ announcement.expirationDate }}</p>
                       <p class="mt-3">{{ announcement.title }}</p>
-                      <p class="mb-5 mt-3">{{ announcement.content }}</p>
+                      <!-- <p class="mb-5 mt-3">{{ announcement.content }}</p> -->
                       <v-divider></v-divider>
                     </div>
                   </div>
@@ -509,7 +521,6 @@ if (regulaAndDocError.value) {
             :items="['學科', '術科']"
             v-model="selectedDepartment"
             :disabled="!selectedCity"
-            @change="updateDepartment"
           ></v-select></v-col>
          <v-col cols="12">
               <v-select
@@ -557,7 +568,7 @@ if (regulaAndDocError.value) {
 
 .custom-card-left {
   width: 60vw; /* 70% of the viewport's width */
-  height: 70vh; /* 50% of the viewport's height */
+  height: 60vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px; /* 添加左边卡片的圆角 */
   margin-bottom: 100px;
@@ -565,7 +576,7 @@ if (regulaAndDocError.value) {
 
 .custom-card-right {
   width: 33vw; /* 30% of the viewport's width */
-  height: 70vh; /* 50% of the viewport's height */
+  height: 60vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px
 }

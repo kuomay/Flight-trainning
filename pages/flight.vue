@@ -1,15 +1,36 @@
-<script setup lang="ts">
-import {useExamStore} from '@/stores/exam'
-
-// const useExam = useExamStore()
-// const { setUserName } = storeToRefs(useExam)
-
+<script setup>
 const tab = ref(null);
-// definePageMeta({
-//   middleware: [
-//     'auth',
-//   ],
-// });
+import { useRouter } from 'vue-router'
+const storeName = ref('');
+
+onMounted(() => {
+  storeName.value = localStorage.getItem('name') || '未知';
+});
+
+const router = useRouter()
+
+const handleLogout = async () => {
+    try {
+        const response = await $fetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/Logout', {
+            method: 'DELETE'
+        });
+
+        if (response.MSG === "ok") {
+            console.log("登出成功！");
+            // 清空 localStorage
+            localStorage.clear();
+            router.push('/login');
+        } else {
+            console.log("登出失敗！");
+            alert('登出失敗，請稍後再試。');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        alert('登出時發生錯誤：' + err.message);
+    }
+};
+
+
 </script>
 
 <template>
@@ -21,10 +42,13 @@ const tab = ref(null);
         <v-sheet class="title font-pingfang text-white" color="transparent">
           飛行教育資源平台
         </v-sheet>
-        <h4 class="member-name">李學員</h4>
+
         <v-sheet class="login-icon" color="transparent">
-          <img class="mr-9" src="/assets/images/icon/组 25.png" />
-          <img src="/assets/images/icon/组 4.png" />
+          <h4 class="member-name">{{ storeName }} : 學員</h4>
+          <img class="mr-16" src="/assets/images/icon/组 25.png" />
+          <button @click="handleLogout">
+            <img src="/assets/images/icon/组 4.png" />
+          </button>
         </v-sheet>
       </div>
       <v-card>
@@ -79,15 +103,20 @@ const tab = ref(null);
 .login-icon {
   margin-top: 25px;
   margin-left: 400px;
-  /* margin-right: 100px; */
+}
+
+.login-icon img {
+  width: 3rem; 
+  height: auto; 
 }
 
 .member-name {
+  font-size: 2rem; 
+  margin: 1rem; 
   color: #FFFFFF;
-  font-size: 35px;
   position: absolute;
-  top: 30px;
-  left: 1553px;
+  top: 15px;
+  left: 1420px;
 }
 
 .v-tab {

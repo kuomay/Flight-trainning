@@ -1,10 +1,10 @@
-<script>
+<script setup>
 definePageMeta({
     layout: 'header'
 })
 
 const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystem');
-console.log(response);
+// console.log(response);
 
 response.data._rawValue.systemAnnouncements.forEach((item) => {
     console.log(item);
@@ -18,15 +18,12 @@ response.data._rawValue.systemAnnouncements.forEach((item) => {
             <div class="system-data-title"> 
                 <h2 style="padding: 1rem;">系統公告</h2>
             </div>
-            <p>68</p>
-            <!-- <div class="system-data-content" v-for="item in response.data._rawValue.systemAnnouncements" v-if="response">
-                <p>{{ item.id }}</p>
-                <ul>
-                    <li class="mt-3"><strong>期程:{{ item.content }}</strong></li>
-                    <li><strong>班別:</strong> {{ item.fileName }}</li>
-                    <li><strong>學科考場:</strong> {{ item.expirationDate }}</li>
-                </ul>
-            </div> -->
+            <div class="system-data-content" v-for="item in response.data._rawValue.systemAnnouncements" v-if="response">
+                    <p class="mt-9 text-subtitle-1">{{ item.expirationDate }}</p>
+                    <p class="mt-3">{{ item.title }}</p>
+                    <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + item.fileName" download class="mb-5 mt-5">{{ item.content }}</a>
+                    <v-divider></v-divider>
+            </div>
         </v-card>
     </div>
 </template>

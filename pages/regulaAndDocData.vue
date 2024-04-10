@@ -1,7 +1,14 @@
-<script>
+<script setup>
 definePageMeta({
     layout: 'header'
 })
+
+const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetRegulaAndDoc');
+// console.log(response);
+
+response.data._rawValue.regulationsAndDocuments.forEach((item) => {
+    console.log(item);
+});
 </script>
 
 <template>
@@ -10,8 +17,12 @@ definePageMeta({
             <div class="regula-data-title"> 
                 <h2 style="padding: 1rem;">法規及文件</h2>
             </div>
-            <div class="regula-data-content">
-
+              <div class="regula-data-content" v-for="item in response.data._rawValue.regulationsAndDocuments" v-if="response">
+                    <p class="mt-9 text-subtitle-1">{{ item.expirationDate }}</p>
+                    <!-- <p class="mt-3">{{ item.title }}</p> -->
+                    <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + item.content" download class="mt-5 mb-5">{{ item.title }}</a>
+                    <!-- <a :href="'https://maxs-fer.geosat.com.tw/PDF/' + item.fileName" download class="mb-5 mt-5">{{ item.content }}</a> -->
+                    <v-divider></v-divider>
             </div>
         </v-card>
     </div>

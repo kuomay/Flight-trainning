@@ -1,5 +1,4 @@
 <script setup>
-
 const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessionsInfo');
 console.log(response.data._rawValue);
 
@@ -17,9 +16,9 @@ const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessi
                 <h2 style="padding: 1.5rem;">訊息列表</h2>
             </div>
             <div class="news-content" v-for="item in response.data._rawValue.trainingSessions" v-if="response">
-                <Nuxt-link :to="url" class="news-link">{{ item.name }}</Nuxt-link>
+              <p class="mt-3 ml-3 text-subtitle-1">{{ item.period }}</p>
+                <newsDetail class="title" :name="item.name" :id="item.id"/>
                 <ul>
-                    <li class="mt-3"><strong>期程:{{ item.period }}</strong></li>
                     <li><strong>班別:</strong> {{ item.classType }}</li>
                     <li><strong>學科考場:</strong> {{ item.academicTestLocation }}</li>
                     <li><strong>術科考場:</strong> {{ item.technicalTestLocation }}</li>
@@ -31,6 +30,14 @@ const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessi
 
 <style scoped>
 
+.title {
+  color: #153161; 
+}
+
+.title :hover {
+  color: #B34712; 
+}
+
 .news {
   width: 80vw;
   margin: auto;
@@ -41,12 +48,13 @@ const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessi
   background: #B34712;
   color: #FFFFFF;
   border-bottom: 1px solid #dee2e6;
+  font-size: 28px;
 }
 
 .text-card {
   border-radius: 20px 20px 0 0;
   color: #000000;
-  font-size: 18px;
+  font-size: 20px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* 為卡片添加陰影效果 */
   transition: 0.3s; /* 添加過渡效果 */
 }
@@ -61,22 +69,11 @@ const url = 'https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetTrainingSessi
   margin-bottom: 1rem; 
   line-height: 1.5;
 }
-
-.news-link {
-  text-decoration: none; 
-  font-size: 35px;
-  color: #153161;
-  font-weight: bold;
-}
-
-.news-link:hover {
-  color: #FFA500; /* 修改为您想要的悬停颜色 */
-}
-
 .news-content ul {
   list-style: none;
   padding: 0;
-  margin-top: 1rem;
+  margin-left: 10px;
+  /* margin-top: 1rem; */
 }
 
 .news-content ul li {
