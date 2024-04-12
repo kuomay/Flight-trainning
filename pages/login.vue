@@ -6,10 +6,7 @@ import {useExamStore} from '@/stores/exam'
 const useExam = useExamStore()
 const {storeAccount} = storeToRefs(useExam)
 const { storeName } = storeToRefs(useExam);
-
-
 const router = useRouter()
-
 const userAccount = ref('');
 const userPassword = ref('');
 const userInterimPassword = ref('');
@@ -39,17 +36,14 @@ const InterimPasswordRules = [
 ];
 
 const handleSubmit = async () => {
-
     if (!userAccount.value || !userPassword.value) {
         alert('請填寫所有欄位');
         return;
     }
-
     if (userPassword.value.length < 5) {
         alert('密碼至少需要 5 個字符');
         return;
     }
-
     try {
         const response = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginChk', {
             method: 'POST',
@@ -60,7 +54,6 @@ const handleSubmit = async () => {
             })
         })
         // console.log(response)
-   
         if (response.data._rawValue.MSG === "ok") {
             // console.log("登入成功！");
             localStorage.setItem('name', response.data._rawValue.Data.Name);
@@ -72,19 +65,16 @@ const handleSubmit = async () => {
             console.log("帳號或密碼错误！");
             alert('登入失敗，請檢查您的帳號或密碼');
         }
-    } catch (err) {
-        console.error('Error:',err);
-        alert('登入失敗，請檢查您的帳號或密碼');
-    }
-};
+        } catch (err) {
+            console.error('Error:',err);
+            alert('登入失敗，請檢查您的帳號或密碼');
+        }
+  };
 
-
+const isForget = ref(false)
 const handleForgotPassword = () => {
     isForget.value = !isForget.value
 };
-
-const isForget = ref(false)
-
 
 watch(userAccount, (newVal, oldVal) => {
       storeAccount.value = newVal
@@ -96,13 +86,10 @@ watch(userAccount, (newVal, oldVal) => {
 <template>
     <div class="banner-content d-flex justify-space-around">
       <Nuxt-link to="/"><v-sheet class="title-icon" color="transparent">
-          <img src="/assets/images/icon/组 2.png" />
+        <img src="/assets/images/icon/组 2.png" />
         </v-sheet></Nuxt-link>
-      <v-sheet class="title font-pingfang text-white" color="transparent">
-        飛行教育資源平台
-      </v-sheet>
-      <v-sheet class="login-icon" color="transparent">
-      </v-sheet>
+        <v-sheet class="title font-pingfang text-white" color="transparent">飛行教育資源平台</v-sheet>
+        <v-sheet class="login-icon" color="transparent"></v-sheet>
     </div>
 
     <div class="login-container bg-grey-lighten-2" v-if="!isForget">
@@ -133,39 +120,38 @@ watch(userAccount, (newVal, oldVal) => {
 
     <!-- <div class="login-container bg-grey-lighten-2" v-else>
         <h3 class="login-title mb-16">忘記密碼</h3>
-        <v-card class="login w-50">
+          <v-card class="login w-50"> 
+            <form>
+              <v-text-field
+                v-model="userInterimPassword"
+                label="臨時密碼"
+                :rules="InterimPasswordRules"
+                class="mb-8 w-75 mx-auto mt-16"
+                prepend-icon="mdi-lock"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="userNewPassword"
+                label="新密碼"
+                :rules="passwordRules"
+                class="mb-5 w-75 mx-auto"
+                prepend-icon="mdi-lock"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="userConfirmNewPassword"
+                label="確認新密碼"
+                :rules="passwordRules"
+                class="mb-5 w-75 mx-auto"
+                prepend-icon="mdi-lock"
+              ></v-text-field>
+
+                <div class="btn mb-16">
+                    <v-btn class="" block @click="handleRevise">完成</v-btn>
+                </div>
             
-        <form>
-          <v-text-field
-            v-model="userInterimPassword"
-            label="臨時密碼"
-            :rules="InterimPasswordRules"
-            class="mb-8 w-75 mx-auto mt-16"
-            prepend-icon="mdi-lock"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="userNewPassword"
-            label="新密碼"
-            :rules="passwordRules"
-            class="mb-5 w-75 mx-auto"
-            prepend-icon="mdi-lock"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="userConfirmNewPassword"
-            label="確認新密碼"
-            :rules="passwordRules"
-            class="mb-5 w-75 mx-auto"
-            prepend-icon="mdi-lock"
-          ></v-text-field>
-
-            <div class="btn mb-16">
-                <v-btn class="" block @click="handleRevise">完成</v-btn>
-            </div>
-         
-        </form>
-        </v-card>
+            </form>
+          </v-card>
     </div> -->
    
 </template>

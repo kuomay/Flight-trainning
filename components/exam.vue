@@ -44,9 +44,9 @@ const examList = ref([
 onMounted(() => {
   storeName.value = localStorage.getItem('name') || '未知';
 });
+
 const startExam = async () => {
   examStarted.value = true;
-
   countdown.value = examConfig[selectedExamType.value].duration === '30分鐘' ? 30 * 60 : 60 * 60;
 
   try {
@@ -62,7 +62,7 @@ const startExam = async () => {
     });
 
     // 如果需要處理回應的資料，可以在這裡進行操作
-    const examQuestions = response; //JSON.stringify(response);
+    const examQuestions = response; 
     //console.log(JSON.parse(examQuestions));
     // 將取得的測驗題目設置到 examList 中
     examList.value = examQuestions.data._value.questions;
@@ -73,24 +73,24 @@ const startExam = async () => {
   
   const timer = setInterval(() => {
     countdown.value--;
-    if (countdown.value <= 0) {
-      clearInterval(timer);
-      alert('作答已結束');
-      store.addExamData(examList.value);
-      isSubmit.value = true;
-      examList.value.forEach((exam, index) => {
-      if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
-        totalScore.value += 100 / examConfig[selectedExamType.value].questionCount;
-      } else {
-        // 根據考試類型扣分
-        if (selectedExamType.value === '普通學科測驗') {
-          totalScore.value -= 5;
-        } else if (selectedExamType.value === '專業學科測驗') {
-          totalScore.value -= 2.5;
+      if (countdown.value <= 0) {
+        clearInterval(timer);
+        alert('作答已結束');
+        store.addExamData(examList.value);
+        isSubmit.value = true;
+        examList.value.forEach((exam, index) => {
+        if (userAns[index] && userAns[index].toUpperCase() === exam.answer) {
+          totalScore.value += 100 / examConfig[selectedExamType.value].questionCount;
+        } else {
+          // 根據考試類型扣分
+          if (selectedExamType.value === '普通學科測驗') {
+            totalScore.value -= 5;
+          } else if (selectedExamType.value === '專業學科測驗') {
+            totalScore.value -= 2.5;
+          }
         }
+      });
       }
-    });
-    }
   }, 1000);
 };
 

@@ -16,6 +16,7 @@ import Hualien from 'assets/images/map/组 1160.png'
 import Taitung from 'assets/images/map/组 1159.png'
 import Yilan from 'assets/images/map/组 1161.png'
 import Kaohsiung from 'assets/images/map/组 1162.png'
+import { ref, computed  } from 'vue';
 
 const items = ref([
   {
@@ -32,7 +33,19 @@ const items = ref([
   // }
 ])
 
-import { ref, computed } from 'vue';
+// const Count = ref(null);
+// const CountError = ref(null);
+
+// onMounted(async () => {
+//   try {
+//     const { data } = await useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginCount');
+//     Count.value = data._rawValue.Data.Count;
+//     localStorage.setItem('count', Count.value); 
+//   } catch (error) {
+//     CountError.value = error;
+//     console.error('Error fetching Count data:', CountError.value);
+//   }
+// });
 
 const selectedRegion = ref('北');
 const selectedCity = ref('臺北市');
@@ -368,27 +381,34 @@ watch([selectedCity, selectedDepartment], () => {
   return null;
 });
 
-
-
 const { data: systemDataResponse, error: systemError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetSystemRow/2');
 const systemData = systemDataResponse;
 console.log(systemData);
 
+if (systemError.value) {
+  console.error('Error fetching system data:', systemError.value);
+}
+
 const { data: caaDataResponse, error: caaError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetCaaRow/2');
 const caaData = caaDataResponse;
+
+if (caaError.value) {
+  console.error('Error fetching CAA data:', caaError.value);
+}
 
 const { data: regulaAndDocDataResponse, error: regulaAndDocError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/MAXSFER/GetRegulaAndDocRow/2');
 const regulaAndDocData = regulaAndDocDataResponse;
 
-if (systemError.value) {
-  console.error('Error fetching system data:', systemError.value);
-}
-if (caaError.value) {
-  console.error('Error fetching CAA data:', caaError.value);
-}
 if (regulaAndDocError.value) {
   console.error('Error fetching regula and doc data:', regulaAndDocError.value);
 }
+
+const count = ref(null);
+const { data: countDataResponse, error: countError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginCount');
+console.log(countDataResponse?._rawValue?.Data?.Count);
+count.value = countDataResponse?._rawValue?.Data?.Count;
+
+
 </script>
 
 <template>
@@ -400,6 +420,7 @@ if (regulaAndDocError.value) {
       <v-sheet class="title font-pingfang text-white" color="transparent">
         飛行教育資源平台
       </v-sheet>
+      <p class="count">目前總登錄人數：{{ count }}人</p>
       <Nuxt-link to="/login"><v-sheet class="login-icon" color="transparent">
         <img src="/assets/images/icon/组 1147.png" />
       </v-sheet></Nuxt-link>
@@ -674,7 +695,6 @@ h5 {
 }
 
 .taiwan-photo {
-  /* margin-left: 180px; */
   grid-row: 1/3;
   grid-column: 2/3;
 }
@@ -684,5 +704,14 @@ h5 {
   grid-column: 1/2;
   margin-top: 490px;
   margin-left: 220px;
+}
+
+.count {
+  font-size: 1.5rem; 
+  margin: 1rem; 
+  color: #FFFFFF;
+  position: absolute;
+  top: 14px;
+  left: 1420px;
 }
 </style>

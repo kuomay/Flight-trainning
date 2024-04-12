@@ -7,6 +7,7 @@ onMounted(() => {
   storeName.value = localStorage.getItem('name') || '未知';
 });
 
+
 const router = useRouter()
 
 const handleLogout = async () => {
@@ -36,9 +37,9 @@ const handleLogout = async () => {
 <template>
    <div class="container">
     <div class="banner-content d-flex justify-space-around">
-        <Nuxt-link to="/"><v-sheet class="title-icon" color="transparent">
+        <v-sheet class="title-icon" color="transparent">
           <img src="/assets/images/icon/组 2.png" />
-        </v-sheet></Nuxt-link>
+        </v-sheet>
         <v-sheet class="title font-pingfang text-white" color="transparent">
           飛行教育資源平台
         </v-sheet>
