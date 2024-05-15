@@ -407,8 +407,6 @@ const count = ref(null);
 const { data: countDataResponse, error: countError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginCount');
 console.log(countDataResponse?._rawValue?.Data?.Count);
 count.value = countDataResponse?._rawValue?.Data?.Count;
-
-
 </script>
 
 <template>
@@ -420,7 +418,7 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
       <v-sheet class="title font-pingfang text-white" color="transparent">
         飛行教育資源平台
       </v-sheet>
-      <p class="count">目前總登錄人數：{{ count }}人</p>
+      <p class="count">目前總登入人數：{{ count }}人</p>
       <Nuxt-link to="/login"><v-sheet class="login-icon" color="transparent">
         <img src="/assets/images/icon/组 1147.png" />
       </v-sheet></Nuxt-link>
