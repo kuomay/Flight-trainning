@@ -1,5 +1,12 @@
 <script setup>
 import banner from 'assets/images/banner.jpg'
+import TaipeiStart from 'assets/images/TaipeiStart.jpg'
+import 開訓中二內 from 'assets/images/開訓中二內.jpg'
+import 開訓中二外 from 'assets/images/開訓中二外.jpg'
+import 開訓南三 from 'assets/images/開訓南三.jpg'
+import 開訓北四 from 'assets/images/開訓北四.jpg'
+import 開訓中五 from 'assets/images/開訓中五.jpg'
+import 結訓北一 from 'assets/images/結訓北一.jpg'
 import taipei from 'assets/images/map/组 1147.png'
 import kinmen from 'assets/images/map/组 1148.png'
 import Keelung from 'assets/images/map/组 1149.png'
@@ -20,17 +27,26 @@ import { ref, computed  } from 'vue';
 
 const items = ref([
   {
-    src: banner
+    src: TaipeiStart,
   },
-  // {
-  //   src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-  // },
-  // {
-  //   src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-  // },
-  // {
-  //   src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-  // }
+  {
+    src: 開訓中二內,
+  },
+  {
+    src: 開訓中二外,
+  },
+  {
+    src: 開訓南三,
+  },
+  {
+    src: 開訓北四,
+  },
+  {
+    src: 開訓中五,
+  },
+  {
+    src: 結訓北一,
+  },
 ])
 
 // const Count = ref(null);
@@ -424,7 +440,7 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
       </v-sheet></Nuxt-link>
       
     </div>
-    <v-carousel class="carousel" :show-arrows="false">
+    <v-carousel class="carousel" :show-arrows="false" cycle hide-delimiter-background  height="590">
       <v-carousel-item
         v-for="(item, i) in items"
         :key="i"
@@ -497,7 +513,7 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
                     position: relative;
                   "
                   alt="icon"
-                />法規及文件
+                /> 法規及文件
               </div>
               <div class="card-body">
                 <div class="right-content">
@@ -564,6 +580,11 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
 </template>
 
 <style scoped>
+
+.carousel {
+  height: 500px;
+}
+
 .banner-content {
   height: 100px;
   background-color: #153161;
