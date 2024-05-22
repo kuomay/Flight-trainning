@@ -615,7 +615,7 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
 }
 
 .custom-card-right {
-  width: 33vw; /* 30% of the viewport's width */
+  width: 30vw; /* 30% of the viewport's width */
   height: 60vh; /* 50% of the viewport's height */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px
