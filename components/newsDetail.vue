@@ -25,8 +25,13 @@
                     <p>學科地址：{{ item.academicTestLocationAddress }}</p>
                     <p>術科考場：{{ item.technicalTestLocation }}</p>
                     <p>術科地址：{{ item.technicalTestLocationAddress }}</p>
-                    <p>師資教官姓名及證照：<br>{{ item.instructors }}</p>
+                    <p>師資教官姓名及證照：<br> </p>
+                    <p v-for="instructors in item.instructors.split('\n')">{{ instructors }}</p>
                     <p>訓練無人機形式及型號：{{ item.droneTraining }}</p>
+                    <p>教育訓練成果：</p>
+                    <div v-for="photo in item.photo" :key="photo" class="photo-container">
+                      <img :src="`https://maxs-fer.geosat.com.tw${photo}`" alt="Training Photo">
+                    </div>
                 </div>
             </template>
           </v-card>
@@ -49,5 +54,17 @@ p {
     text-align: start;
     font-weight: 800;
     font-size: 2.1rem;
+}
+
+.photo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.training-photo {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px; /* 根據需要調整最大高度 */
 }
 </style>
