@@ -28,9 +28,10 @@
                     <p>師資教官姓名及證照：<br> </p>
                     <p v-for="instructors in item.instructors.split('\n')">{{ instructors }}</p>
                     <p>訓練無人機形式及型號：{{ item.droneTraining }}</p>
-                    <p>教育訓練成果：</p>
-                    <div v-for="photo in item.photo" :key="photo" class="photo-container">
-                      <img :src="`https://maxs-fer.geosat.com.tw${photo}`" alt="Training Photo">
+                    
+                    <div class="photo-container" v-if="item.photo.length > 0">
+                      <p>教育訓練成果：</p>
+                      <img v-for="photo in item.photo" :key="photo" :src="`https://maxs-fer.geosat.com.tw${photo}`" alt="Training Photo"  class="training-photo">
                     </div>
                 </div>
             </template>
@@ -58,13 +59,15 @@ p {
 
 .photo-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin-bottom: 15px;
+  gap: 9px;
 }
 
 .training-photo {
-  max-width: 100%;
-  height: auto;
-  max-height: 300px; /* 根據需要調整最大高度 */
+  width: 740px; 
+  height: auto; 
 }
+
 </style>
