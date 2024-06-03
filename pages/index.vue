@@ -24,6 +24,9 @@ import Taitung from 'assets/images/map/组 1159.png'
 import Yilan from 'assets/images/map/组 1161.png'
 import Kaohsiung from 'assets/images/map/组 1162.png'
 import { ref, computed  } from 'vue';
+import footer from 'assets/images/footer/footer.png'
+import facebook from 'assets/images/footer/facebook.png'
+import youtube from 'assets/images/footer/youtube.png'
 
 const items = ref([
   {
@@ -423,6 +426,18 @@ const count = ref(null);
 const { data: countDataResponse, error: countError } = useFetch('https://maxs-fer.geosat.com.tw/Examine/api/Login/LoginCount');
 console.log(countDataResponse?._rawValue?.Data?.Count);
 count.value = countDataResponse?._rawValue?.Data?.Count;
+
+const startYear = 2004;
+const currentYear = ref(new Date().getFullYear());
+
+
+const openFacebook = () => {
+  window.open("https://www.facebook.com/Geosat.TW", "_blank");
+};
+
+const openYoutube = () => {
+  window.open("https://www.youtube.com/@geosattaiwan", "_blank");
+};
 </script>
 
 <template>
@@ -434,8 +449,9 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
       <v-sheet class="title font-pingfang text-white" color="transparent">
         飛行教育資源平台
       </v-sheet>
-      <p class="count">目前總登入人數：{{ count }}人</p>
+  
       <Nuxt-link to="/login"><v-sheet class="login-icon" color="transparent">
+        <p class="count">目前訪客數：{{ count }}人</p>
         <img src="/assets/images/icon/组 1147.png" />
       </v-sheet></Nuxt-link>
       
@@ -523,7 +539,7 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
                     <v-divider></v-divider>
                   </div>
                   <div class="button-container">
-                    <Nuxt-link to="/regulaAndDocData" class="btn btn-primary">更多</Nuxt-link>
+                    <Nuxt-link to="/regulaAndDocData" class="btn btn-primary ">更多</Nuxt-link>
                   </div>
                 </div>
               </div>
@@ -576,7 +592,27 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
         </div>
         <div class="taiwan-photo"><img :src="cityImageMap[selectedCity]"  :alt="selectedCity"></div>
     </div>
-  </div>
+
+    <div class="footer-content">
+      <div class="flex-item item-1">
+        <a href="https://www.geosat.com.tw/TW/index.aspx">
+          <img class="ml-3 mt-2" src="/assets/images/footer/footer.png" alt="Geosat">
+        </a>
+      </div>
+      <div class="flex-item item-2"><p class="footer mt-8 text-white">© {{ startYear }}-{{ currentYear }}  版權所有 GEOSAT Aerospace & Technology Inc.</p></div>
+
+      <!-- <div class="vertical-line"></div> -->
+
+      <div class="flex-item item-3"> 
+        <v-btn icon="mdi-facebook" color="blue" size="x-large" @click="openFacebook()" class="mr-5"></v-btn>
+        <v-btn icon="mdi-youtube" color="red" size="x-large" @click="openYoutube()"></v-btn>
+
+
+      </div>
+    </div>
+
+    </div>
+
 </template>
 
 <style scoped>
@@ -598,25 +634,25 @@ count.value = countDataResponse?._rawValue?.Data?.Count;
 .title {
   letter-spacing: 0;
   margin-top: 29px;
+  font-size: 30px;
 }
 
 .login-icon {
   margin-top: 25px;
   margin-left: 400px;
-  /* margin-right: 100px; */
 }
 
 .custom-card-left {
-  width: 60vw; /* 70% of the viewport's width */
-  height: 60vh; /* 50% of the viewport's height */
+  width: 60vw; 
+  height: 60vh; 
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 10px; /* 添加左边卡片的圆角 */
+  border-radius: 10px; 
   margin-bottom: 100px;
 }
 
 .custom-card-right {
-  width: 30vw; /* 30% of the viewport's width */
-  height: 60vh; /* 50% of the viewport's height */
+  width: 30vw; 
+  height: 60vh; 
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 10px
 }
@@ -658,23 +694,27 @@ h5 {
 }
 
 .button-container {
-  text-align: center;
+  width: 5vw;
+  margin: auto;
 }
 
 .btn-primary {
-  padding: 5px 14px;
   text-decoration: none;
   color: #fff;
-  background-color: #B34712;
+  text-align: center;
+  line-height: 35px;
+  font-size: 17px;
+  background-color: #969696 ;
   border-radius: 25px;
   display: inline-block;
-  margin-top: 15px;
+  width: 65px;
+  height: 35px;
+  margin-top: 12px;
 }
 
 .btn-primary:hover {
-  background-color: #FFAA00;
+  background-color: #B34712;
 }
-
 
 .subjects-container {
   display: grid;
@@ -730,7 +770,55 @@ h5 {
   margin: 1rem; 
   color: #FFFFFF;
   position: absolute;
-  top: 14px;
-  left: 1420px;
+  top: 20px;
+  left: 1400px;
 }
+
+.footer-content {
+  display: flex;
+  height: 220px;
+  background: #153161 0% 0% no-repeat padding-box;
+  opacity: 1;
+  margin-top: 97px;
+}
+
+.flex-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #ffff;
+}
+
+.item-1 {
+  width: 40%;
+}
+
+.item-2 {
+            width: 40%;
+            position: relative; 
+        }
+        .item-2::after {
+            content: "";
+            position: absolute;
+            right: -10px; 
+            width: 2px;
+            height: 60px;
+            background-color: white;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+.item-3 {
+  width: 20%;
+}
+
+/* .vertical-line {
+            width: 2px;
+            height: 70px;
+            background-color: white; 
+            position: relative;
+            top: 75px;
+        } */
 </style>

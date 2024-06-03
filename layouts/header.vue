@@ -33,6 +33,7 @@
 .title {
   letter-spacing: 0;
   margin-top: 29px;
+  font-size: 30px;
 }
 
 .login-icon {

@@ -176,6 +176,7 @@ watch(userAccount, (newVal, oldVal) => {
   letter-spacing: 0;
   margin-top: 29px;
   margin-right: 350px;
+  font-size: 30px;
 }
 
 .login-title {

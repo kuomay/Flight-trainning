@@ -46,7 +46,7 @@ const handleLogout = async () => {
 
         <v-sheet class="login-icon" color="transparent">
           <h4 class="member-name">{{ storeName }} : 學員</h4>
-          <img class="mr-16" src="/assets/images/icon/组 25.png" />
+          <img class="mr-16 mt-1" src="/assets/images/icon/组 25.png" />
           <button @click="handleLogout">
             <img src="/assets/images/icon/组 4.png" />
           </button>
@@ -99,6 +99,7 @@ const handleLogout = async () => {
 .title {
   letter-spacing: 0;
   margin-top: 29px;
+  font-size: 30px;
 }
 
 .login-icon {
@@ -112,12 +113,11 @@ const handleLogout = async () => {
 }
 
 .member-name {
-  font-size: 2rem; 
   margin: 1rem; 
   color: #FFFFFF;
   position: absolute;
-  top: 15px;
-  left: 1420px;
+  top: 13px;
+  left: 1400px;
 }
 
 .v-tab {
